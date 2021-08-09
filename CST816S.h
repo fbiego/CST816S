@@ -47,6 +47,10 @@ class CST816S {
 		void end();
 		void sleep(bool state);
 	private:
+		int _sda;
+		int _scl;
+		int _rst;
+		int _irq;
 		bool _touch_enable;
 };
 
