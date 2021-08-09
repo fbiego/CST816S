@@ -2,7 +2,7 @@
   "name": "CST816S",
   "version": "1.0.0",
   "keywords": "Arduino, ESP32, Touch, Hynitron, CST816S, I2C",
-  "description": "A library implementing MPESA Daraja on Arduino microcontrollers",
+  "description": "An Arduino library for the CST816S capacitive touch screen IC",
   "repository":
   {
     "type": "git",
