@@ -26,3 +26,8 @@
 
 
 #include "CST816S.h"
+
+CST816S::CST816S(){
+	
+	
+}
