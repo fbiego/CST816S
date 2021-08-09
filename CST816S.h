@@ -36,6 +36,8 @@
 #define CST816S_DOUBLE_CLICK	0x0B
 #define CST816S_LONG_PRESS		0x0C
 
+#define CST816S_ADDRESS			0x15
+
 
 class CST816S {
 	
@@ -43,8 +45,9 @@ class CST816S {
 		CST816S(int sda, int scl, int rst, int irq);
 		void begin();
 		void end();
-		
+		void sleep(bool state);
 	private:
+		bool _touch_enable;
 };
 
 
