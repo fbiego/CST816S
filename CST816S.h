@@ -40,7 +40,9 @@
 class CST816S {
 	
 	public:
-		
+		CST816S(int sda, int scl, int rst, int irq);
+		void begin();
+		void end();
 		
 	private:
 };
