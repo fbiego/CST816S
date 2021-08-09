@@ -26,8 +26,31 @@
 
 
 #include "CST816S.h"
+int enabled = false;
 
-CST816S::CST816S(){
+CST816S::CST816S(int sda, int scl, int rst, int irq){
+	_sda = sda;
+	_scl = scl;
+	_rst = rst;
+	_irq = irq;
 	
-	
+}
+
+CST816S::begin(){
+	if (!enabled) {
+    enabled = true;
+    pinMode(_rst, OUTPUT);
+    pinMode(_irq, INPUT);
+
+    digitalWrite(_rst, HIGH );
+    delay(50);
+    digitalWrite(_rst, LOW);
+    delay(5);
+    digitalWrite(_rst, HIGH );
+    delay(50);
+
+    user_i2c_read(touch_dev_addr, 0x15, &touch_data.version15, 1);
+    delay(5);
+    user_i2c_read(touch_dev_addr, 0xA7, touch_data.versionInfo, 3);
+  }
 }
