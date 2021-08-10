@@ -56,6 +56,21 @@ void CST816S::begin(){
     user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
 }
 
+void IRAM_ATTR CST816S::ISR(){
+	_event_available = true;
+}
+
+void read_touch() {
+  byte data_raw[8];
+  user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
+
+  touch_data.gesture = data_raw[0];
+  touch_data.points = data_raw[1];
+  touch_data.event = data_raw[2] >> 6;
+  touch_data.x = data_raw[3];
+  touch_data.y = data_raw[5];
+}
+
 void CST816S::sleep(bool state) {
   digitalWrite(_rst, LOW);
   delay(5);
