@@ -23,9 +23,11 @@
 */
 
 #include "Arduino.h"
-
+#include <Wire.h>
 
 #include "CST816S.h"
+
+
 int enabled = false;
 
 CST816S::CST816S(int sda, int scl, int rst, int irq){
