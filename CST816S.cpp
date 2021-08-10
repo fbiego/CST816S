@@ -38,7 +38,7 @@ CST816S::CST816S(int sda, int scl, int rst, int irq){
 	
 }
 
-CST816S::begin(){
+void CST816S::begin(){
 	Wire.begin(_sda, _scl);
 	
     pinMode(_irq, INPUT);
@@ -59,4 +59,18 @@ CST816S::begin(){
     delay(5);
     user_i2c_read(touch_dev_addr, 0xA7, touch_data.versionInfo, 3);
   }
+}
+
+uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
+{
+  set_i2cReading(true);
+  Wire.beginTransmission(addr);
+  Wire.write(reg_addr);
+  if ( Wire.endTransmission(true))return -1;
+  Wire.requestFrom(addr, length, true);
+  for (int i = 0; i < length; i++) {
+    *reg_data++ = Wire.read();
+  }
+  set_i2cReading(false);
+  return 0;
 }
