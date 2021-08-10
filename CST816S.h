@@ -44,11 +44,11 @@ struct touch_data_struct {
   byte event;
   int x;
   int y;
-
   uint8_t version;
   uint8_t versionInfo[3];
-}
-touch_data;
+};
+
+touch_data_struct touch_data;
 
 class CST816S {
 
