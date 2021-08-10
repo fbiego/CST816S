@@ -51,9 +51,9 @@ void CST816S::begin(){
     digitalWrite(_rst, HIGH );
     delay(50);
 
-    user_i2c_read(CST816S_ADDRESS, 0x15, &touch_data.version, 1);
+    user_i2c_read(CST816S_ADDRESS, 0x15, &data.version, 1);
     delay(5);
-    user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
+    user_i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
 }
 
 
@@ -74,11 +74,11 @@ void CST816S::read_touch() {
   byte data_raw[8];
   user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
 
-  touch_data.gesture = data_raw[0];
-  touch_data.points = data_raw[1];
-  touch_data.event = data_raw[2] >> 6;
-  touch_data.x = data_raw[3];
-  touch_data.y = data_raw[5];
+  data.gesture = data_raw[0];
+  data.points = data_raw[1];
+  data.event = data_raw[2] >> 6;
+  data.x = data_raw[3];
+  data.y = data_raw[5];
 }
 
 void CST816S::sleep(bool state) {
