@@ -38,13 +38,13 @@
 
 #define CST816S_ADDRESS			0x15
 
-struct touch_data {
+struct touch_data_struct{
 	byte gesture;
   byte points;
   byte event;
   int x;
   int y;
-}
+}touch_data ;
 
 
 class CST816S {
