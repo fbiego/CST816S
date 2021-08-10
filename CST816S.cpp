@@ -74,3 +74,18 @@ uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, ui
   set_i2cReading(false);
   return 0;
 }
+
+
+uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, uint32_t length)
+{
+  byte error;
+  set_i2cReading(true);
+  Wire.beginTransmission(addr);
+  Wire.write(reg_addr);
+  for (int i = 0; i < length; i++) {
+    Wire.write(*reg_data++);
+  }
+  if ( Wire.endTransmission(true))return -1;
+  set_i2cReading(false);
+  return 0;
+}
