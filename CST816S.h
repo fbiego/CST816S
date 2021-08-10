@@ -52,6 +52,8 @@ class CST816S {
 		int _rst;
 		int _irq;
 		bool _touch_enable;
+		
+		uint8_t i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length);
 };
 
 
