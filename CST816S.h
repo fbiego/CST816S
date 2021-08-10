@@ -48,7 +48,7 @@ struct touch_data_struct {
   uint8_t versionInfo[3];
 };
 
-touch_data_struct touch_data;
+
 
 class CST816S {
 
@@ -57,13 +57,19 @@ class CST816S {
 	void begin();
 	void end();
 	void sleep(bool state);
+	bool available();
+	touch_data_struct touch_data;
+	
   private:
     int _sda;
 	int _scl;
 	int _rst;
 	int _irq;
 	bool _touch_enable;
-
+	
+	bool _event_available;
+	void IRAM_ATTR ISR();
+	
 	uint8_t i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t * reg_data, uint32_t length);
 	uint8_t i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t * reg_data, uint32_t length);
 };

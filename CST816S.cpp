@@ -56,6 +56,17 @@ void CST816S::begin(){
     user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
 }
 
+void CST816S::sleep(bool state) {
+  digitalWrite(_rst, LOW);
+  delay(5);
+  digitalWrite(_rst, HIGH );
+  delay(50);
+  if (state) {
+    byte standby_value = 0x03;
+    user_i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
+  }
+}
+
 uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
 {
   Wire.beginTransmission(addr);
