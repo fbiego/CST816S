@@ -56,11 +56,21 @@ void CST816S::begin(){
     user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
 }
 
-void IRAM_ATTR CST816S::ISR(){
-	_event_available = true;
+
+bool CST816S::available(){
+	if (_event_available){
+		_event_available = false;
+		return true;
+	}
+	return false;
 }
 
-void read_touch() {
+void IRAM_ATTR CST816S::ISR(){
+	_event_available = true;
+	read_touch();
+}
+
+void CST816S::read_touch() {
   byte data_raw[8];
   user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
 
