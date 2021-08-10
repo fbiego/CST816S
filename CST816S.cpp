@@ -36,6 +36,24 @@ CST816S::CST816S(int sda, int scl, int rst, int irq){
 	
 }
 
+void CST816S::read_touch() {
+  byte data_raw[8];
+  user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
+
+  data.gesture = data_raw[0];
+  data.points = data_raw[1];
+  data.event = data_raw[2] >> 6;
+  data.x = data_raw[3];
+  data.y = data_raw[5];
+}
+
+void IRAM_ATTR CST816S::ISR(){
+	_event_available = true;
+	read_touch();
+}
+
+
+
 void CST816S::begin(){
 	Wire.begin(_sda, _scl);
 	
@@ -63,22 +81,6 @@ bool CST816S::available(){
 		return true;
 	}
 	return false;
-}
-
-void IRAM_ATTR CST816S::ISR(){
-	_event_available = true;
-	read_touch();
-}
-
-void CST816S::read_touch() {
-  byte data_raw[8];
-  user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
-
-  data.gesture = data_raw[0];
-  data.points = data_raw[1];
-  data.event = data_raw[2] >> 6;
-  data.x = data_raw[3];
-  data.y = data_raw[5];
 }
 
 void CST816S::sleep(bool state) {
