@@ -38,6 +38,8 @@
 
 #define CST816S_ADDRESS 		0x15
 
+#define CST816S_
+
 struct touch_data_struct {
   byte gesture;
   byte points;
