@@ -39,10 +39,14 @@ CST816S::CST816S(int sda, int scl, int rst, int irq){
 }
 
 CST816S::begin(){
+	Wire.begin(_sda, _scl);
+	
+    pinMode(_irq, INPUT);
+	attachInterrupt(_irq, ISR, RISING);
+	
 	if (!enabled) {
     enabled = true;
     pinMode(_rst, OUTPUT);
-    pinMode(_irq, INPUT);
 
     digitalWrite(_rst, HIGH );
     delay(50);
