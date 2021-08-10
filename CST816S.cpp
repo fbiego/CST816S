@@ -55,9 +55,9 @@ void CST816S::begin(){
     digitalWrite(_rst, HIGH );
     delay(50);
 
-    user_i2c_read(touch_dev_addr, 0x15, &touch_data.version15, 1);
+    user_i2c_read(CST816S_ADDRESS, 0x15, &touch_data.version15, 1);
     delay(5);
-    user_i2c_read(touch_dev_addr, 0xA7, touch_data.versionInfo, 3);
+    user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
   }
 }
 
