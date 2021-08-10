@@ -38,7 +38,7 @@ CST816S::CST816S(int sda, int scl, int rst, int irq){
 
 void CST816S::read_touch() {
   byte data_raw[8];
-  user_i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
+  i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
 
   data.gesture = data_raw[0];
   data.points = data_raw[1];
@@ -90,7 +90,7 @@ void CST816S::sleep(bool state) {
   delay(50);
   if (state) {
     byte standby_value = 0x03;
-    user_i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
+    i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
   }
 }
 
