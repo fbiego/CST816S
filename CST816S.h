@@ -38,7 +38,7 @@
 
 #define CST816S_ADDRESS 		0x15
 
-struct touch_data_struct {
+struct data_struct {
   byte gesture;
   byte points;
   byte event;
@@ -58,7 +58,7 @@ class CST816S {
 	void end();
 	void sleep(bool state);
 	bool available();
-	touch_data_struct touch_data;
+	data_struct data;
 	
   private:
     int _sda;
