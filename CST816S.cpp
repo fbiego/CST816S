@@ -69,9 +69,9 @@ void CST816S::begin(){
     digitalWrite(_rst, HIGH );
     delay(50);
 
-    user_i2c_read(CST816S_ADDRESS, 0x15, &data.version, 1);
+    i2c_read(CST816S_ADDRESS, 0x15, &data.version, 1);
     delay(5);
-    user_i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
+    i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
 }
 
 

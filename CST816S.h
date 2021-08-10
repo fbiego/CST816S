@@ -67,8 +67,9 @@ class CST816S {
 	int _irq;
 	bool _touch_enable;
 	
-	bool _event_available;
+	volatile bool _event_available;
 	void IRAM_ATTR ISR();
+	void read_touch();
 	
 	uint8_t i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t * reg_data, uint32_t length);
 	uint8_t i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t * reg_data, uint32_t length);
