@@ -28,8 +28,6 @@
 #include "CST816S.h"
 
 
-int enabled = false;
-
 CST816S::CST816S(int sda, int scl, int rst, int irq){
 	_sda = sda;
 	_scl = scl;
@@ -43,9 +41,7 @@ void CST816S::begin(){
 	
     pinMode(_irq, INPUT);
 	attachInterrupt(_irq, ISR, RISING);
-	
-	if (!enabled) {
-    enabled = true;
+
     pinMode(_rst, OUTPUT);
 
     digitalWrite(_rst, HIGH );
@@ -58,12 +54,10 @@ void CST816S::begin(){
     user_i2c_read(CST816S_ADDRESS, 0x15, &touch_data.version15, 1);
     delay(5);
     user_i2c_read(CST816S_ADDRESS, 0xA7, touch_data.versionInfo, 3);
-  }
 }
 
 uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
 {
-  set_i2cReading(true);
   Wire.beginTransmission(addr);
   Wire.write(reg_addr);
   if ( Wire.endTransmission(true))return -1;
@@ -71,21 +65,17 @@ uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, ui
   for (int i = 0; i < length; i++) {
     *reg_data++ = Wire.read();
   }
-  set_i2cReading(false);
   return 0;
 }
 
 
 uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, uint32_t length)
 {
-  byte error;
-  set_i2cReading(true);
   Wire.beginTransmission(addr);
   Wire.write(reg_addr);
   for (int i = 0; i < length; i++) {
     Wire.write(*reg_data++);
   }
   if ( Wire.endTransmission(true))return -1;
-  set_i2cReading(false);
   return 0;
 }
