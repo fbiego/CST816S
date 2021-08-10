@@ -1,7 +1,7 @@
 #include <CST816S.h>
 
 
-CST816S touch(21, 22, 4, 5);
+CST816S touch(21, 22, 5, 4);
 
 void setup(){
 	Serial.begin(115200);

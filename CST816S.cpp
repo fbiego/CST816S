@@ -47,7 +47,7 @@ void CST816S::read_touch() {
   data.y = data_raw[5];
 }
 
-void IRAM_ATTR CST816S::ISR(){
+static void IRAM_ATTR CST816S::ISR(){
 	_event_available = true;
 	read_touch();
 }
