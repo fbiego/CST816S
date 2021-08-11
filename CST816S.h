@@ -39,7 +39,7 @@
 #define CST816S_ADDRESS     0x15
 
 struct data_struct {
-  byte gesture; // Gesture ID
+  byte gestureID; // Gesture ID
   byte points;  // Number of touch points
   byte event; // Event (0 = Down, 1 = Up, 2 = Contact)
   int x;
@@ -58,7 +58,7 @@ class CST816S {
     void sleep();
     bool available();
     data_struct data;
-    String eventName();
+    String gesture();
 
 
   private:

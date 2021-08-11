@@ -55,7 +55,7 @@ void CST816S::read_touch() {
   byte data_raw[8];
   i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
 
-  data.gesture = data_raw[0];
+  data.gestureID = data_raw[0];
   data.points = data_raw[1];
   data.event = data_raw[2] >> 6;
   data.x = data_raw[3];
@@ -120,8 +120,8 @@ void CST816S::sleep() {
 /*!
     @brief  get the gesture event name
 */
-String CST816S::eventName() {
-  switch (data.gesture) {
+String CST816S::gesture() {
+  switch (data.gestureID) {
     case CST816S_NONE:
       return "NONE";
       break;

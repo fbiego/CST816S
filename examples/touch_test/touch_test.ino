@@ -45,7 +45,7 @@ void setup() {
 void loop() {
 
   if (touch.available()) {
-    Serial.print(touch.eventName());
+    Serial.print(touch.gesture());
     Serial.print("\t");
     Serial.print(touch.data.points);
     Serial.print("\t");

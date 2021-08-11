@@ -4,6 +4,7 @@ begin					KEYWORD2
 available				KEYWORD2
 sleep					KEYWORD2
 begin					KEYWORD2
+gesture					KEYWORD2
 
 CST816S_NONE			LITERAL2
 CST816S_SWIPE_DOWN		LITERAL2
