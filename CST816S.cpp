@@ -24,16 +24,18 @@
 
 #include "Arduino.h"
 #include <Wire.h>
+#include <FunctionalInterrupt.h>
 
 #include "CST816S.h"
 
 
-CST816S::CST816S(int sda, int scl, int rst, int irq){
-	_sda = sda;
-	_scl = scl;
-	_rst = rst;
-	_irq = irq;
-	
+
+CST816S::CST816S(int sda, int scl, int rst, int irq) {
+  _sda = sda;
+  _scl = scl;
+  _rst = rst;
+  _irq = irq;
+
 }
 
 void CST816S::read_touch() {
@@ -47,50 +49,79 @@ void CST816S::read_touch() {
   data.y = data_raw[5];
 }
 
-static void IRAM_ATTR CST816S::ISR(){
-	_event_available = true;
-	read_touch();
+void IRAM_ATTR CST816S::handleISR(void) {
+  _event_available = true;
+
 }
 
+void CST816S::begin() {
+  Wire.begin(_sda, _scl);
 
+  pinMode(_irq, INPUT);
+  pinMode(_rst, OUTPUT);
 
-void CST816S::begin(){
-	Wire.begin(_sda, _scl);
-	
-    pinMode(_irq, INPUT);
-	attachInterrupt(_irq, ISR, RISING);
-
-    pinMode(_rst, OUTPUT);
-
-    digitalWrite(_rst, HIGH );
-    delay(50);
-    digitalWrite(_rst, LOW);
-    delay(5);
-    digitalWrite(_rst, HIGH );
-    delay(50);
-
-    i2c_read(CST816S_ADDRESS, 0x15, &data.version, 1);
-    delay(5);
-    i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
-}
-
-
-bool CST816S::available(){
-	if (_event_available){
-		_event_available = false;
-		return true;
-	}
-	return false;
-}
-
-void CST816S::sleep(bool state) {
+  digitalWrite(_rst, HIGH );
+  delay(50);
   digitalWrite(_rst, LOW);
   delay(5);
   digitalWrite(_rst, HIGH );
   delay(50);
-  if (state) {
-    byte standby_value = 0x03;
-    i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
+
+  i2c_read(CST816S_ADDRESS, 0x15, &data.version, 1);
+  delay(5);
+  i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
+
+  attachInterrupt(_irq, std::bind(&CST816S::handleISR, this), RISING);
+}
+
+
+bool CST816S::available() {
+  if (_event_available) {
+    read_touch();
+    _event_available = false;
+    return true;
+  }
+  return false;
+}
+
+void CST816S::sleep() {
+  digitalWrite(_rst, LOW);
+  delay(5);
+  digitalWrite(_rst, HIGH );
+  delay(50);
+  byte standby_value = 0x03;
+  i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
+}
+
+String CST816S::eventName() {
+  switch (data.gesture) {
+    case CST816S_NONE:
+      return "NONE";
+      break;
+    case CST816S_SWIPE_DOWN:
+      return "SWIPE DOWN";
+      break;
+    case CST816S_SWIPE_UP:
+      return "SWIPE UP";
+      break;
+    case CST816S_SWIPE_LEFT:
+      return "SWIPE LEFT";
+      break;
+    case CST816S_SWIPE_RIGHT:
+      return "SWIPE RIGHT";
+      break;
+    case CST816S_SINGLE_CLICK:
+      return "SINGLE CLICK";
+      break;
+    case CST816S_DOUBLE_CLICK:
+      return "DOUBLE CLICK";
+      break;
+    case CST816S_LONG_PRESS:
+      return "LONG PRESS";
+      break;
+    default:
+      return "UNKNOWN";
+      break;
   }
 }
 

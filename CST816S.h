@@ -27,21 +27,21 @@
 
 #include <Arduino.h>
 
-#define CST816S_NONE 			0x00
-#define CST816S_SWIPE_DOWN 		0x01
-#define CST816S_SWIPE_UP 		0x02
-#define CST816S_SWIPE_LEFT 		0x03
-#define CST816S_SWIPE_RIGHT 	0x04
-#define CST816S_SINGLE_CLICK 	0x05
-#define CST816S_DOUBLE_CLICK 	0x0B
-#define CST816S_LONG_PRESS 		0x0C
+#define CST816S_NONE       	0x00
+#define CST816S_SWIPE_DOWN    0x01
+#define CST816S_SWIPE_UP    0x02
+#define CST816S_SWIPE_LEFT    0x03
+#define CST816S_SWIPE_RIGHT   0x04
+#define CST816S_SINGLE_CLICK  0x05
+#define CST816S_DOUBLE_CLICK  0x0B
+#define CST816S_LONG_PRESS    0x0C
 
-#define CST816S_ADDRESS 		0x15
+#define CST816S_ADDRESS     0x15
 
 struct data_struct {
-  byte gesture;
-  byte points;
-  byte event;
+  byte gesture; // Gesture ID
+  byte points;  // Number of touch points
+  byte event; // Event (0 = Down, 1 = Up, 2 = Contact)
   int x;
   int y;
   uint8_t version;
@@ -54,25 +54,25 @@ class CST816S {
 
   public:
     CST816S(int sda, int scl, int rst, int irq);
-	void begin();
-	void end();
-	void sleep(bool state);
-	bool available();
-	data_struct data;
-	
+    void begin();
+    void sleep();
+    bool available();
+    data_struct data;
+    String eventName();
+
+
   private:
     int _sda;
-	int _scl;
-	int _rst;
-	int _irq;
-	bool _touch_enable;
-	
-	volatile bool _event_available;
-	void IRAM_ATTR ISR();
-	void read_touch();
-	
-	uint8_t i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t * reg_data, uint32_t length);
-	uint8_t i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t * reg_data, uint32_t length);
+    int _scl;
+    int _rst;
+    int _irq;
+    bool _event_available;
+
+    void IRAM_ATTR handleISR();
+    void read_touch();
+
+    uint8_t i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t * reg_data, uint32_t length);
+    uint8_t i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t * reg_data, uint32_t length);
 };
 
 #endif
