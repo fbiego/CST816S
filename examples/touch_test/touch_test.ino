@@ -1,28 +1,27 @@
 #include <CST816S.h>
 
+CST816S touch(21, 22, 5, 4);	// sda, scl, rst, irq
 
-CST816S touch(21, 22, 5, 4);
+void setup() {
+  Serial.begin(115200);
 
-void setup(){
-	Serial.begin(115200);
-	
-	touch.begin();
-	
-	    Serial.print(touch.data.version);
-    Serial.print("\t");
-    Serial.print(touch.data.versionInfo[0]);
-    Serial.print("-");
-    Serial.print(touch.data.versionInfo[1]);
-    Serial.print("-");
-    Serial.println(touch.data.versionInfo[2]);
-	
+  touch.begin();
+
+  Serial.print(touch.data.version);
+  Serial.print("\t");
+  Serial.print(touch.data.versionInfo[0]);
+  Serial.print("-");
+  Serial.print(touch.data.versionInfo[1]);
+  Serial.print("-");
+  Serial.println(touch.data.versionInfo[2]);
+
 }
 
 
-void loop(){
-	
-	if (touch.available()){
-	Serial.print(touch.data.gesture);
+void loop() {
+
+  if (touch.available()) {
+    Serial.print(touch.eventName());
     Serial.print("\t");
     Serial.print(touch.data.points);
     Serial.print("\t");
@@ -31,8 +30,8 @@ void loop(){
     Serial.print(touch.data.x);
     Serial.print("\t");
     Serial.println(touch.data.y);
-		
-	}
-	
-	
+
+  }
+
+
 }
