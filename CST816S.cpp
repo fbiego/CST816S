@@ -154,6 +154,14 @@ String CST816S::eventName() {
 
 /*!
     @brief  read data from i2c
+	@param	addr
+			i2c device address
+	@param	reg_addr
+			device register address
+	@param	reg_data
+			array to copy the read data
+	@param	length
+			length of data
 */
 uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
 {
