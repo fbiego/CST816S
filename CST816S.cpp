@@ -29,7 +29,17 @@
 #include "CST816S.h"
 
 
-
+/*!
+    @brief  Constructor for CST816S
+	@param	sda
+			i2c data pin
+	@param	scl
+			i2c clock pin
+	@param	rst
+			touch reset pin
+	@param	irq
+			touch interrupt pin
+*/
 CST816S::CST816S(int sda, int scl, int rst, int irq) {
   _sda = sda;
   _scl = scl;
@@ -38,6 +48,9 @@ CST816S::CST816S(int sda, int scl, int rst, int irq) {
 
 }
 
+/*!
+    @brief  read touch data
+*/
 void CST816S::read_touch() {
   byte data_raw[8];
   i2c_read(CST816S_ADDRESS, 0x01, data_raw, 6);
@@ -49,11 +62,17 @@ void CST816S::read_touch() {
   data.y = data_raw[5];
 }
 
+/*!
+    @brief  handle interrupts
+*/
 void IRAM_ATTR CST816S::handleISR(void) {
   _event_available = true;
 
 }
 
+/*!
+    @brief  initialize the touch screen
+*/
 void CST816S::begin() {
   Wire.begin(_sda, _scl);
 
@@ -74,7 +93,9 @@ void CST816S::begin() {
   attachInterrupt(_irq, std::bind(&CST816S::handleISR, this), RISING);
 }
 
-
+/*!
+    @brief  check for a touch event
+*/
 bool CST816S::available() {
   if (_event_available) {
     read_touch();
@@ -84,6 +105,9 @@ bool CST816S::available() {
   return false;
 }
 
+/*!
+    @brief  put the touch screen in standby mode
+*/
 void CST816S::sleep() {
   digitalWrite(_rst, LOW);
   delay(5);
@@ -93,6 +117,9 @@ void CST816S::sleep() {
   i2c_write(CST816S_ADDRESS, 0xA5, &standby_value, 1);
 }
 
+/*!
+    @brief  get the gesture event name
+*/
 String CST816S::eventName() {
   switch (data.gesture) {
     case CST816S_NONE:
@@ -125,6 +152,9 @@ String CST816S::eventName() {
   }
 }
 
+/*!
+    @brief  read data from i2c
+*/
 uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
 {
   Wire.beginTransmission(addr);
@@ -137,7 +167,9 @@ uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, ui
   return 0;
 }
 
-
+/*!
+    @brief  write data to i2c
+*/
 uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, uint32_t length)
 {
   Wire.beginTransmission(addr);
