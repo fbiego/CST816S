@@ -57,7 +57,7 @@ class CST816S {
 
   public:
     CST816S(int sda, int scl, int rst, int irq);
-    void begin(int interrupt = FALLING);
+    void begin(int interrupt = RISING);
     void sleep();
     bool available();
     data_struct data;
