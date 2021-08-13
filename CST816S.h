@@ -27,16 +27,19 @@
 
 #include <Arduino.h>
 
-#define CST816S_NONE       	0x00
-#define CST816S_SWIPE_DOWN    0x01
-#define CST816S_SWIPE_UP    0x02
-#define CST816S_SWIPE_LEFT    0x03
-#define CST816S_SWIPE_RIGHT   0x04
-#define CST816S_SINGLE_CLICK  0x05
-#define CST816S_DOUBLE_CLICK  0x0B
-#define CST816S_LONG_PRESS    0x0C
-
 #define CST816S_ADDRESS     0x15
+
+enum GESTURE {
+  NONE = 0x00,
+  SWIPE_DOWN = 0x01,
+  SWIPE_UP = 0x02,
+  SWIPE_LEFT = 0x03,
+  SWIPE_RIGHT = 0x04,
+  SINGLE_CLICK = 0x05,
+  DOUBLE_CLICK = 0x0B,
+  LONG_PRESS = 0x0C
+
+};
 
 struct data_struct {
   byte gestureID; // Gesture ID
@@ -54,7 +57,7 @@ class CST816S {
 
   public:
     CST816S(int sda, int scl, int rst, int irq);
-    void begin();
+    void begin(int interrupt = FALLING);
     void sleep();
     bool available();
     data_struct data;

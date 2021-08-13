@@ -72,8 +72,10 @@ void IRAM_ATTR CST816S::handleISR(void) {
 
 /*!
     @brief  initialize the touch screen
+	@param	interrupt
+			type of interrupt FALLING, RISING..
 */
-void CST816S::begin() {
+void CST816S::begin(int interrupt) {
   Wire.begin(_sda, _scl);
 
   pinMode(_irq, INPUT);
@@ -90,7 +92,7 @@ void CST816S::begin() {
   delay(5);
   i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
 
-  attachInterrupt(_irq, std::bind(&CST816S::handleISR, this), RISING);
+  attachInterrupt(_irq, std::bind(&CST816S::handleISR, this), interrupt);
 }
 
 /*!
@@ -122,28 +124,28 @@ void CST816S::sleep() {
 */
 String CST816S::gesture() {
   switch (data.gestureID) {
-    case CST816S_NONE:
+    case NONE:
       return "NONE";
       break;
-    case CST816S_SWIPE_DOWN:
+    case SWIPE_DOWN:
       return "SWIPE DOWN";
       break;
-    case CST816S_SWIPE_UP:
+    case SWIPE_UP:
       return "SWIPE UP";
       break;
-    case CST816S_SWIPE_LEFT:
+    case SWIPE_LEFT:
       return "SWIPE LEFT";
       break;
-    case CST816S_SWIPE_RIGHT:
+    case SWIPE_RIGHT:
       return "SWIPE RIGHT";
       break;
-    case CST816S_SINGLE_CLICK:
+    case SINGLE_CLICK:
       return "SINGLE CLICK";
       break;
-    case CST816S_DOUBLE_CLICK:
+    case DOUBLE_CLICK:
       return "DOUBLE CLICK";
       break;
-    case CST816S_LONG_PRESS:
+    case LONG_PRESS:
       return "LONG PRESS";
       break;
     default:
