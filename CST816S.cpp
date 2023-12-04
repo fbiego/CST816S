@@ -165,7 +165,7 @@ String CST816S::gesture() {
 	@param	length
 			length of data
 */
-uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, uint32_t length)
+uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, size_t length)
 {
   Wire.beginTransmission(addr);
   Wire.write(reg_addr);
@@ -189,7 +189,7 @@ uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, ui
 	@param	length
 			length of data
 */
-uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, uint32_t length)
+uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, size_t length)
 {
   Wire.beginTransmission(addr);
   Wire.write(reg_addr);
