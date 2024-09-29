@@ -1,6 +1,6 @@
 {
   "name": "CST816S",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "keywords": "Arduino, ESP32, Touch, Hynitron, CST816S, I2C",
   "description": "An Arduino library for the CST816S capacitive touch screen IC",
   "repository":
@@ -14,6 +14,9 @@
         "name": "fbiego",
         "email": "fbiego.fb@gmail.com",
         "maintainer": true
+    },
+    {
+        "name": "georgemclaughlin"
     }
   ],
   "frameworks": "arduino",
