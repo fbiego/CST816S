@@ -5,7 +5,7 @@
 
  ## Register Information
 
- The following information was extracted from (this document)[https://www.waveshare.com/w/upload/c/c2/CST816S_register_declaration.pdf] provided by Waveshare.
+ The following information was extracted from [this document](https://www.waveshare.com/w/upload/c/c2/CST816S_register_declaration.pdf) provided by Waveshare.
 
  | Register Name     | Address | Bit Description                                       | Default Value | Configuration Options                                          |
 |-------------------|---------|-------------------------------------------------------|---------------|----------------------------------------------------------------|
