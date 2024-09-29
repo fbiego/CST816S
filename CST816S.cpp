@@ -71,6 +71,24 @@ void IRAM_ATTR CST816S::handleISR(void) {
 }
 
 /*!
+    @brief  enable double click
+*/
+void CST816S::enable_double_click(void) {
+  byte enableDoubleTap = 0x01; // Set EnDClick (bit 0) to enable double-tap
+  i2c_write(CST816S_ADDRESS, 0xEC, &enableDoubleTap, 1);
+}
+
+/*!
+    @brief  Enable auto standby mode with a specified delay.
+    @param  milliseconds
+            Time in milliseconds before entering standby mode.
+*/
+void CST816S::enable_auto_standby(uint16_t milliseconds) {
+    byte standbyTime = min(milliseconds / 1000, 255); // Convert milliseconds to seconds, max value 255
+    i2c_write(CST816S_ADDRESS, 0xF9, &standbyTime, 1);
+}
+
+/*!
     @brief  initialize the touch screen
 	@param	interrupt
 			type of interrupt FALLING, RISING..

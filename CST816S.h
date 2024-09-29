@@ -58,6 +58,8 @@ class CST816S {
   public:
     CST816S(int sda, int scl, int rst, int irq);
     void begin(int interrupt = RISING);
+    void enable_double_click();
+    void enable_auto_standby(uint16_t milliseconds);
     void sleep();
     bool available();
     data_struct data;
