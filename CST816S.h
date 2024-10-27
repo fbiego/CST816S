@@ -59,7 +59,10 @@ class CST816S {
     CST816S(int sda, int scl, int rst, int irq);
     void begin(int interrupt = RISING);
     void enable_double_click();
-    void enable_auto_standby(uint16_t milliseconds);
+    void disable_auto_sleep();
+    void enable_auto_sleep();
+    void set_auto_sleep_time(int seconds);
+    void attachUserInterrupt(std::function<void(void)> callback);
     void sleep();
     bool available();
     data_struct data;
@@ -72,6 +75,8 @@ class CST816S {
     int _rst;
     int _irq;
     bool _event_available;
+    std::function<void(void)> userISR;
+
 
     void IRAM_ATTR handleISR();
     void read_touch();

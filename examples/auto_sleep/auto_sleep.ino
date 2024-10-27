@@ -25,20 +25,45 @@
 #include <CST816S.h>
 
 CST816S touch(21, 22, 5, 4);  // sda, scl, rst, irq
-int doubleClickCount = 0;     // Counter for double clicks
 
 void setup() {
   Serial.begin(115200);
+  
   touch.begin();
-  touch.enable_double_click(); // Enable double-click detection
+
+  // Print version information
+  Serial.print("Touch Firmware Version: ");
+  Serial.print(touch.data.version);
+  Serial.print("\t");
+  Serial.print(touch.data.versionInfo[0]);
+  Serial.print("-");
+  Serial.print(touch.data.versionInfo[1]);
+  Serial.print("-");
+  Serial.println(touch.data.versionInfo[2]);
+
+  // Disable auto sleep to keep the device active (useful during debugging or testing)
+  touch.disable_auto_sleep();
+  Serial.println("Auto sleep disabled");
+
+  // Optionally, set a custom auto sleep time (e.g., 10 seconds)
+  touch.set_auto_sleep_time(10);
+  Serial.println("Auto sleep timeout set to 10 seconds");
+
+  // Setting the auto sleep time does not automatically reenable auto sleep
+  touch.enable_auto_sleep();
 }
 
 void loop() {
   if (touch.available()) {
-    if (touch.gesture() == "DOUBLE CLICK") {
-      doubleClickCount++;
-      Serial.print("Double Click Count: ");
-      Serial.println(doubleClickCount);
-    }
+    Serial.print("Gesture: ");
+    Serial.print(touch.gesture());
+    Serial.print("\tPoints: ");
+    Serial.print(touch.data.points);
+    Serial.print("\tEvent: ");
+    Serial.print(touch.data.event);
+    Serial.print("\tX: ");
+    Serial.print(touch.data.x);
+    Serial.print("\tY: ");
+    Serial.println(touch.data.y);
   }
 }
