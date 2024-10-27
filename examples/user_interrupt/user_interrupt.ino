@@ -24,21 +24,36 @@
 
 #include <CST816S.h>
 
-CST816S touch(21, 22, 5, 4);  // sda, scl, rst, irq
-int doubleClickCount = 0;     // Counter for double clicks
+CST816S touch(21, 22, 5, 4);	// sda, scl, rst, irq
+
+// Flag to indicate a touch interrupt has occurred
+volatile bool touchEventFlag = false;
+
+// Interrupt function to set the flag
+void IRAM_ATTR onTouchInterrupt() {
+  touchEventFlag = true;
+}
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   touch.begin();
+  touch.attachUserInterrupt(onTouchInterrupt);
   touch.enable_double_click(); // Enable double-click detection
 }
 
 void loop() {
-  if (touch.available()) {
-    if (touch.gesture() == "DOUBLE CLICK") {
-      doubleClickCount++;
-      Serial.print("Double Click Count: ");
-      Serial.println(doubleClickCount);
+  // Check if the interrupt flag has been set by the interrupt handler
+  if (touchEventFlag) {
+    touchEventFlag = false; // Clear the flag
+
+    // Check if there’s touch data available
+    if (touch.available()) {
+      // Check if the gesture is a double touch
+      if (touch.gesture() == "DOUBLE CLICK") {
+        Serial.println("Double touch detected!");
+      } else {
+        Serial.println("Touch event detected, but not a double touch.");
+      }
     }
   }
 }
