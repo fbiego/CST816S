@@ -26,6 +26,12 @@
 #define CST816S_H
 
 #include <Arduino.h>
+#include <Wire.h>
+
+// Make sure Wire1 is available on RP2040
+#if defined(ARDUINO_ARCH_RP2040)
+extern TwoWire Wire1;
+#endif
 
 #define CST816S_ADDRESS     0x15
 
@@ -57,6 +63,7 @@ class CST816S {
 
   public:
     CST816S(int sda, int scl, int rst, int irq);
+    void begin(TwoWire &wire = Wire, int interrupt = RISING);
     void begin(int interrupt = RISING);
     void enable_double_click();
     void disable_auto_sleep();
@@ -70,6 +77,7 @@ class CST816S {
 
 
   private:
+    TwoWire *_wire;
     int _sda;
     int _scl;
     int _rst;
