@@ -28,6 +28,10 @@
 
 #include "CST816S.h"
 
+// Make sure Wire1 is available on RP2040
+#if defined(ARDUINO_ARCH_RP2040)
+extern TwoWire Wire1;
+#endif
 
 /*!
     @brief  Constructor for CST816S
@@ -41,6 +45,7 @@
 			touch interrupt pin
 */
 CST816S::CST816S(int sda, int scl, int rst, int irq) {
+  _wire = nullptr;
   _sda = sda;
   _scl = scl;
   _rst = rst;
@@ -121,11 +126,15 @@ void CST816S::set_auto_sleep_time(int seconds)
 
 /*!
     @brief  initialize the touch screen
-	@param	interrupt
+	@param	wire
+			which of the i2c busses to use
+		interrupt
 			type of interrupt FALLING, RISING..
+
 */
-void CST816S::begin(int interrupt) {
-  Wire.begin(_sda, _scl);
+void CST816S::begin(TwoWire &wire_instance, int interrupt) {
+  wire_instance.begin(_sda, _scl);
+  _wire = &wire_instance;
 
   pinMode(_irq, INPUT);
   pinMode(_rst, OUTPUT);
@@ -142,6 +151,15 @@ void CST816S::begin(int interrupt) {
   i2c_read(CST816S_ADDRESS, 0xA7, data.versionInfo, 3);
 
   attachInterrupt(_irq, std::bind(&CST816S::handleISR, this), interrupt);
+}
+
+/*!
+    @brief  initialize the touch screen
+	@param	interrupt
+			type of interrupt FALLING, RISING..
+*/
+void CST816S::begin(int interrupt) {
+  begin(Wire, interrupt);
 }
 
 /*!
@@ -225,12 +243,12 @@ String CST816S::gesture() {
 */
 uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, size_t length)
 {
-  Wire.beginTransmission(addr);
-  Wire.write(reg_addr);
-  if ( Wire.endTransmission(true))return -1;
-  Wire.requestFrom(addr, length, true);
+  _wire->beginTransmission(addr);
+  _wire->write(reg_addr);
+  if ( _wire->endTransmission(true))return -1;
+  _wire->requestFrom(addr, length, true);
   for (int i = 0; i < length; i++) {
-    *reg_data++ = Wire.read();
+    *reg_data++ = _wire->read();
   }
   return 0;
 }
@@ -249,11 +267,11 @@ uint8_t CST816S::i2c_read(uint16_t addr, uint8_t reg_addr, uint8_t *reg_data, si
 */
 uint8_t CST816S::i2c_write(uint8_t addr, uint8_t reg_addr, const uint8_t *reg_data, size_t length)
 {
-  Wire.beginTransmission(addr);
-  Wire.write(reg_addr);
+  _wire->beginTransmission(addr);
+  _wire->write(reg_addr);
   for (int i = 0; i < length; i++) {
-    Wire.write(*reg_data++);
+    _wire->write(*reg_data++);
   }
-  if ( Wire.endTransmission(true))return -1;
+  if ( _wire->endTransmission(true))return -1;
   return 0;
 }
